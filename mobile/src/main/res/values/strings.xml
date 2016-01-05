@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TestWatchToPhone</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="accessToken">pk.eyJ1IjoicGF1bGNvbnJveSIsImEiOiJjaWdlYTJkZG0waDVhdXlrcmRxbTJjNmphIn0.o3siuThILDGWiBn6BTs_jQ</string>
+    <string name="location_string">Current Location</string>
+    <string name="marker_string">Marker</string>
+    <string name="beacon_title">Beacon</string>
+</resources>

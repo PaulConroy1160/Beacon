@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_pressed">@android:color/holo_blue_dark</color>
+    <color name="blue_normal">@android:color/holo_blue_light</color>
+    <color name="green_pressed">@android:color/holo_green_dark</color>
+    <color name="green_normal">@android:color/holo_green_light</color>
+    <color name="red_pressed">@android:color/holo_red_dark</color>
+    <color name="red_normal">@android:color/holo_red_light</color>
+    <color name="orange_pressed">#ffff8800</color>
+    <color name="orange_normal">#ffffbb33</color>
+</resources>

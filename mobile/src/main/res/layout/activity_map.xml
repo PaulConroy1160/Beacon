@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#F1654C"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/logo"
+        android:layout_alignLeft="@+id/map"
+        android:layout_alignStart="@+id/map">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/button"
+            android:layout_weight=".20"
+            android:src="@drawable/menu"
+            android:background="@null"/>
+
+        <TextView android:text="@string/beacon_title"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:textColor="#fff"
+            android:id="@+id/logoFont"
+            android:textSize="30sp"
+            android:gravity="center_horizontal"
+            android:layout_weight=".60"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/refresh"
+            android:layout_weight=".20"
+            android:src="@drawable/refresh"
+            android:background="@null"
+            android:onClick="refresh" />
+
+    </LinearLayout>
+
+
+
+    <fragment
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="350dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/logo" />
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/map"
+        android:layout_centerHorizontal="true"
+        android:background="#fff"
+        android:id="@+id/button_panel">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scan"
+            android:text="SCAN"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:background="@drawable/flat_green_selector"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:textColor="#fff"
+            android:id="@+id/status"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:background="@drawable/flat_orange_selector" />
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
+
+
