@@ -1,0 +1,108 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#252339"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/logo">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logoTop"
+            android:layout_gravity="center_vertical|center"
+            android:src="@drawable/logo_top"
+            android:background="@null"
+            android:layout_weight=".4" />
+
+        <TextView
+            android:text="New User"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/nameText"
+            android:textColor="#fff"
+            android:textSize="30sp"
+            android:gravity="center_horizontal" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
+        android:background="#252339"
+        android:layout_below="@id/logo"
+        android:id="@+id/list">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#fff">
+
+
+        </LinearLayout>
+
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:id="@+id/bioField"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Once upon a time, in 100 words or less..."
+            android:ems="20"
+            android:textSize="20dp"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:textColorHint="#bbb"
+            android:background="#fff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/counterText"
+            android:text="100 REMAINING"
+            android:textColor="#a3f278"
+            android:layout_gravity="right"
+            android:layout_marginRight="50dp" />
+
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:text="Next"
+            android:textSize="25dp"
+            android:id="@+id/submit"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:textColor="#252339"
+            android:layout_gravity="center_horizontal"
+            android:background="#f1654c"
+            android:onClick="submit"
+            android:gravity="center|center_horizontal" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

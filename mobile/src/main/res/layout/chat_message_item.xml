@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="#f45e5e">
+
+        <TextView
+            android:id="@+id/receiverLabel"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:background="#fff"
+            android:gravity="center_vertical|left"
+            android:text="XXXX"
+            android:textColor="#f45e5e"
+            android:textSize="15sp"
+            android:paddingLeft="30dp"
+            android:layout_weight=".3" />
+
+
+        <TextView
+            android:id="@+id/messagelabel"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/routeLabel"
+            android:background="#fff"
+            android:gravity="center_vertical|left"
+            android:text="PLACEHOLDER"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#f45e5e"
+            android:textSize="15sp"
+            android:paddingLeft="30dp"
+            android:layout_weight=".7" />
+
+        <TextView
+            android:id="@+id/senderLabel"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:background="#fff"
+            android:gravity="center_vertical|left"
+            android:text="XXXX"
+            android:textColor="#f45e5e"
+            android:textSize="15sp"
+            android:paddingLeft="30dp"
+            android:layout_weight=".3" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

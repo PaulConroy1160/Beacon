@@ -52,6 +52,8 @@ public class MainActivityWear extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activity_wear);
 
+        startService(new Intent(this, ListenerService.class));
+
         mTextView = (TextView) findViewById(R.id.text);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -95,13 +97,13 @@ public class MainActivityWear extends Activity
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String message = results.get(0);
 
-            String command = message.substring(message.length()-12,message.length());
-
-            if(command.equalsIgnoreCase("send message")){
-                String stripMessage = message.substring(0,message.length()-12);
-                sendMessage(stripMessage);
-            }
-            else if(command.equalsIgnoreCase("drop message")){
+            if (message.length() >= 12) {
+                String command = message.substring(message.length() - 12, message.length());
+                if (command.equalsIgnoreCase("send message")) {
+                    String stripMessage = message.substring(0, message.length() - 12);
+                    sendMessage(stripMessage);
+                }
+            } else {
                 Toast.makeText(this,"drop this message",Toast.LENGTH_LONG).show();
             }
 

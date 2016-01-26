@@ -1,17 +1,13 @@
 package com.example.paulconroy.testwatchtophone;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -31,11 +27,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.Wearable;
-
-
-import java.util.logging.LogRecord;
 
 public class MainActivity extends FragmentActivity
         implements GoogleApiClient.ConnectionCallbacks,
@@ -176,7 +167,7 @@ public class MainActivity extends FragmentActivity
     }
 
     public void timeLineStart(View v){
-        Intent i = new Intent(this,TimeLine.class);
+        Intent i = new Intent(this, Login.class);
         startActivity(i);
     }
 
