@@ -8,4 +8,5 @@
     <string name="location_string">Current Location</string>
     <string name="marker_string">Marker</string>
     <string name="beacon_title">Beacon</string>
+    <string name="Next">Next</string>
 </resources>

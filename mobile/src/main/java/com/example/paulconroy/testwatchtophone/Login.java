@@ -25,6 +25,7 @@ import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +40,7 @@ public class Login extends Activity {
     private ParseUser currentUser = null;
     private Button submit;
     private Button signup;
+    private List<EditText> editTextList;
     private EditText username;
     private EditText password;
     private String usernameText;
@@ -57,6 +59,24 @@ public class Login extends Activity {
         submit = (Button) findViewById(R.id.submit);
         signup = (Button) findViewById(R.id.signup);
 
+        editTextList = new ArrayList<EditText>();
+
+        editTextList.add(username);
+        editTextList.add(password);
+
+        for (final EditText editText : editTextList) {
+
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    }
+                }
+            });
+
+        }
+
 
         typeFace = Typeface.createFromAsset(getAssets(), "fonts/muli.ttf");
 
@@ -64,6 +84,7 @@ public class Login extends Activity {
         //Parse.initialize(this, "JZBfNYfSR3r5VNvhHjb6i4W2o8hxdNhzXh9aTZ9J", "N7NI4lg37yNNgdGUXkHeiyDL0RzNm7ahZep2PKlV");
 
         install = ParseInstallation.getCurrentInstallation();
+
 
         //install.put("userName","PaulyC");
 
@@ -110,6 +131,7 @@ public class Login extends Activity {
     public void isLoggedIn() {
         currentUser = ParseUser.getCurrentUser();
 
+
         String id = currentUser.getObjectId();
 
 
@@ -117,10 +139,14 @@ public class Login extends Activity {
             //Toast.makeText(this,"No user found",Toast.LENGTH_LONG).show();
 
         } else {
-            Toast.makeText(this, "user found!!" + currentUser.getUsername(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "user found!!" + currentUser.getUsername(), Toast.LENGTH_LONG).show();
             searchNewMessages();
-            Intent i = new Intent(this, ChatActivity.class);
+//            Intent i = new Intent(this, ConnectionListActivity.class);
+//            startActivity(i);
+            Intent i = new Intent(this, Loading.class);
             startActivity(i);
+            overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
+            this.finish();
         }
     }
 
@@ -175,10 +201,30 @@ public class Login extends Activity {
     }
 
     public void submit(View v) {
-        usernameText = username.getText().toString();
-        passwordText = password.getText().toString();
+        Boolean valid = true;
 
-        findUsername(usernameText, passwordText);
+        usernameText = username.getText().toString().trim();
+        passwordText = password.getText().toString().trim();
+
+        if (usernameText.length() == 0) {
+            valid = false;
+            username.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.decline_val, 0);
+        }
+        if (passwordText.length() == 0) {
+            valid = false;
+            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.decline_val, 0);
+        }
+
+        if (valid) {
+            username.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+            findUsername(usernameText, passwordText);
+        }
+
+
+
+
     }
 
     private void findUsername(String username, String password) {
@@ -223,11 +269,12 @@ public class Login extends Activity {
     }
 
     public void logIn() {
-        //Intent i = new Intent(this, MainPage.class);
-        searchNewMessages();
-        Intent i = new Intent(this, ChatActivity.class);
-        startActivity(i);
 
+        searchNewMessages();
+        Intent i = new Intent(this, Loading.class);
+        //Intent i = new Intent(this, ConnectionListActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
         this.finish();
     }
 

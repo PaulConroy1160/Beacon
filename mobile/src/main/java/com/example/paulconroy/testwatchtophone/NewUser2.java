@@ -90,7 +90,7 @@ public class NewUser2 extends Activity {
         if (textRemain < 0) {
             counter.setTextColor(Color.parseColor("#f27878"));
             submit.setClickable(false);
-            //submit.setText("Too much info...");
+            submit.setText("....");
             submit.setBackgroundColor(Color.parseColor("#fac7c7"));
 
         } else {
@@ -138,11 +138,14 @@ public class NewUser2 extends Activity {
     }
 
     public void returnToLogin() {
-        Toast.makeText(this, "User created! Welcome, " + userName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "User created! Welcome, " + userName, Toast.LENGTH_LONG).show();
 
-        Intent i = new Intent(this, Login.class);
-
+        Intent i = new Intent(this, Loading.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
+
+
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.example.paulconroy.testwatchtophone.Model.Model;
 import com.google.android.gms.gcm.Task;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -30,6 +31,7 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,7 +46,7 @@ import Database.DB;
  */
 public class ChatActivity extends Activity {
 
-    private Model m;
+    private Model mModel;
     private List messageList;
     private int compareSize;
     private ListView chatList;
@@ -53,6 +55,7 @@ public class ChatActivity extends Activity {
     private EditText messageField;
     private Button sendBTN;
     private ListAdapter adapter;
+    private String targetConnection;
     private Calendar c = Calendar.getInstance();
 
 
@@ -66,8 +69,11 @@ public class ChatActivity extends Activity {
         messageField = (EditText) findViewById(R.id.messageField);
         sendBTN = (Button) findViewById(R.id.sendBTN);
 
+        checkMissedMessages();
 
-        m = Model.getInstance();
+
+        mModel = Model.getInstance();
+        targetConnection = mModel.getTargetConnection();
         db = new DB(this);
 
 
@@ -111,7 +117,7 @@ public class ChatActivity extends Activity {
         Log.d("inside sendmessage", "in here");
         String messageText = messageField.getText().toString();
         ParseQuery query = ParseInstallation.getQuery();
-        query.whereEqualTo("userName", "ronan");
+        query.whereEqualTo("userName", targetConnection);
         ParsePush push = new ParsePush();
         push.setQuery(query);
         push.setMessage(messageText);
@@ -131,7 +137,7 @@ public class ChatActivity extends Activity {
         Message chatMessage = new Message();
 
         chatMessage.setId(-1);
-        chatMessage.setTo("xxxx");
+        chatMessage.setTo(targetConnection);
         chatMessage.setFrom("PaulConroy");
         chatMessage.setMessage(message);
         chatMessage.setTime("XXXX");
@@ -150,7 +156,8 @@ public class ChatActivity extends Activity {
         ParseObject messageObj = new ParseObject("Messages");
         //messageObj.put("sender", user.getUsername());
         //need to change to username
-        messageObj.put("receiver", "ronan");
+        messageObj.put("sender", "brenan");
+        messageObj.put("receiver", targetConnection);
         messageObj.put("messageText", messageText);
         messageObj.setACL(acl);
 
@@ -176,9 +183,18 @@ public class ChatActivity extends Activity {
     }
 
     public void searchNewMessages() {
+        List<Message> compareList = db.getAllMessages();
+        if (messageList.size() != compareList.size()) {
+
+            messageList = compareList;
+            changeAdapter(messageList);
+        }
+    }
+
+    public void checkMissedMessages() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Messages");
         //need to change to username
-        query.whereEqualTo("receiver", "ronan");
+        query.whereEqualTo("receiver", "brendan");
         //query.whereEqualTo("seen",false);
 
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -207,7 +223,34 @@ public class ChatActivity extends Activity {
     }
 
     public void logOut(View v) {
-        ParseUser.logOut();
+        //ParseUser.logOut();
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                closeAndDestroyUser();
+            }
+        });
+
+    }
+
+    public void setTestConnection(View v) {
+        ParseObject connection = new ParseObject("Connections");
+        connection.put("user1", "ronan");
+        connection.put("user2", "brendan");
+        connection.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+
+                if (e == null) {
+                    Log.d("connections", "saved");
+                } else {
+                    Log.d("connections", "not saved, BOOO!!!");
+                }
+            }
+        });
+    }
+
+    public void closeAndDestroyUser() {
         Intent i = new Intent(this, Login.class);
         startActivity(i);
         this.finish();

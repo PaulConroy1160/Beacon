@@ -14,6 +14,7 @@ public class Model {
 
     // create a static instance of com.example.paulconroy.onit.model - set to null
     private static Model instance = null;
+    private String targetConnection = null;
 
     // synchronized locks method
     public static synchronized Model getInstance() {
@@ -41,6 +42,16 @@ public class Model {
     public List<String> getFriendIds() {
         return this.friendId;
     }
+
+    public void setTargetConnection(String conn) {
+        this.targetConnection = conn;
+    }
+
+    public String getTargetConnection() {
+        return this.targetConnection;
+    }
+
+
 
 
 }

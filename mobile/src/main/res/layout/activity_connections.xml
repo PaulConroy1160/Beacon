@@ -15,6 +15,17 @@
         android:layout_alignParentStart="true"
         android:id="@+id/logo">
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton"
+            android:layout_weight=".4"
+            android:layout_gravity="left"
+            android:src="@drawable/menubtn"
+            android:background="@null"
+            android:layout_marginLeft="10dp"
+            android:onClick="logOut" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,8 +35,9 @@
             android:background="@null"
             android:layout_weight=".4" />
 
+
         <TextView
-            android:text="New User"
+            android:text="CONNECTIONS"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:id="@+id/nameText"
@@ -43,10 +55,17 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="50dp"
-        android:background="#252339"
+        android:background="#fff"
         android:layout_below="@id/logo"
         android:id="@+id/list">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/connectionList"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".8"
+            android:stackFromBottom="true" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -58,49 +77,6 @@
 
 
         </LinearLayout>
-
-
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:id="@+id/bioField"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="10dp"
-            android:hint="Tell us about yourself, in 100 words or less..."
-            android:ems="20"
-            android:textSize="20dp"
-            android:gravity="top"
-            android:singleLine="true"
-            android:textColorHint="#bbb"
-            android:background="#fff"
-            android:imeOptions="actionDone" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/counterText"
-            android:text="100 REMAINING"
-            android:textColor="#a3f278"
-            android:layout_gravity="right"
-            android:layout_marginRight="30dp" />
-
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="80dp"
-            android:text="Next"
-            android:textSize="25dp"
-            android:id="@+id/submit"
-            android:layout_marginTop="50dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:textColor="#252339"
-            android:layout_gravity="center_horizontal"
-            android:background="#f1654c"
-            android:onClick="submit"
-            android:gravity="center|center_horizontal" />
 
 
     </LinearLayout>
