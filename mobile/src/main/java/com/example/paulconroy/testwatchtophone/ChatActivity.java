@@ -5,6 +5,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,9 +25,11 @@ import com.example.paulconroy.testwatchtophone.Model.Model;
 import com.google.android.gms.gcm.Task;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -38,6 +42,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.os.Handler;
+
+import org.json.JSONObject;
 
 import Database.DB;
 
@@ -83,16 +89,15 @@ public class ChatActivity extends Activity {
         //REMOVE WHEN TESTING
         messageList = db.getAllMessages();
 
+        messageList = mModel.sortMessage(messageList, user.getUsername());
+
+        getTargetInformation();
+
 
         chatList = (ListView) findViewById(R.id.chatList);
         sendBTN.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-        if (!messageList.isEmpty()) {
-            changeAdapter(messageList);
-            //loadAnimation();
-        } else {
-            Toast.makeText(this, "No Messages available", Toast.LENGTH_LONG).show();
-        }
+        getTargetInformation();
 
         checkUpdates();
 
@@ -118,9 +123,20 @@ public class ChatActivity extends Activity {
         String messageText = messageField.getText().toString();
         ParseQuery query = ParseInstallation.getQuery();
         query.whereEqualTo("userName", targetConnection);
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("alert", messageText);
+            data.put("from", user.getUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         ParsePush push = new ParsePush();
         push.setQuery(query);
-        push.setMessage(messageText);
+        //push.setMessage(messageText);
+        push.setData(data);
 
         push.sendInBackground();
         setMessageObject(messageText);
@@ -138,7 +154,7 @@ public class ChatActivity extends Activity {
 
         chatMessage.setId(-1);
         chatMessage.setTo(targetConnection);
-        chatMessage.setFrom("PaulConroy");
+        chatMessage.setFrom(user.getUsername());
         chatMessage.setMessage(message);
         chatMessage.setTime("XXXX");
 
@@ -156,7 +172,7 @@ public class ChatActivity extends Activity {
         ParseObject messageObj = new ParseObject("Messages");
         //messageObj.put("sender", user.getUsername());
         //need to change to username
-        messageObj.put("sender", "brenan");
+        messageObj.put("sender", user.getUsername());
         messageObj.put("receiver", targetConnection);
         messageObj.put("messageText", messageText);
         messageObj.setACL(acl);
@@ -254,6 +270,55 @@ public class ChatActivity extends Activity {
         Intent i = new Intent(this, Login.class);
         startActivity(i);
         this.finish();
+    }
+
+    public void getTargetInformation() {
+
+        Log.d("inside", "getTargetInformation");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        //need to change to username
+        query.whereEqualTo("userName", mModel.getTargetConnection());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    Log.d("inside", "getTargetInformation");
+                    if (!objects.isEmpty()) {
+                        ParseFile pFile = (ParseFile) objects.get(0).get("pic");
+
+                        pFile.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] data, ParseException e) {
+                                if (e == null) {
+                                    Log.d("success", "data retrieved");
+
+                                    Bitmap picture = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                                    mModel.setTargetPlayerProfilePic(picture);
+                                    loadChatMessages();
+
+
+                                }
+                            }
+                        });
+                    } else {
+                        Log.d("problemo", "no image retrieved");
+
+                    }
+                } else {
+                    Log.d("problemo", "no data retrieved");
+                }
+            }
+        });
+    }
+
+    public void loadChatMessages() {
+        if (!messageList.isEmpty()) {
+            changeAdapter(messageList);
+            //loadAnimation();
+        } else {
+            Toast.makeText(this, "No Messages available", Toast.LENGTH_LONG).show();
+        }
     }
 
 

@@ -102,7 +102,7 @@ public class NewUser2 extends Activity {
 
     }
 
-    public void submit(View v) {
+    public void submit() {
         bioText = bio.getText().toString();
 
 
@@ -146,6 +146,18 @@ public class NewUser2 extends Activity {
         overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
 
 
+    }
+
+    public void profilePic(View v) {
+        bioText = bio.getText().toString();
+        Intent i = new Intent(this, ProfilePhoto.class);
+        i.putExtra("fName", fName);
+        i.putExtra("lName", lName);
+        i.putExtra("userName", userName);
+        i.putExtra("password", password);
+        i.putExtra("bioText", bioText);
+        startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
     }
 
     @Override

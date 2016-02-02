@@ -1,5 +1,7 @@
 package com.example.paulconroy.testwatchtophone.Model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by paulconroy on 02/01/2016.
  */
@@ -12,25 +14,21 @@ public class User {
     private String email;
     private String password;
     private String bio;
-    private String photo;
+    private Bitmap photo;
 
     public User(){
         id = 0;
         fName = "";
         lName = "";
-        email = "";
-        password = "";
         bio = "";
-        photo = "";
+        photo = null;
     }
 
-    public User(int i, String f, String l, String u, String e, String p, String b, String pic){
+    public User(int i, String f, String l, String u, String b, Bitmap pic) {
         this.id = i;
         this.fName = f;
         this.lName = l;
         this.username = u;
-        this.email = e;
-        this.password = p;
         this.bio = b;
         this.photo = pic;
     }
@@ -83,11 +81,11 @@ public class User {
         this.bio = bio;
     }
 
-    public String getPhoto() {
+    public Bitmap getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(Bitmap photo) {
         this.photo = photo;
     }
 

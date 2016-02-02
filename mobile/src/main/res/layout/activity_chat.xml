@@ -22,7 +22,7 @@
             android:src="@drawable/menubtn"
             android:background="@null"
             android:layout_marginLeft="10dp"
-            android:onClick="logOut" />
+            android:onClick="" />
 
         <ImageView
             android:layout_width="wrap_content"

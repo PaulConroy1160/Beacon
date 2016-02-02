@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 
 import com.example.paulconroy.testwatchtophone.Model.Message;
+import com.example.paulconroy.testwatchtophone.Model.Model;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -25,11 +27,13 @@ import java.util.List;
 public class ChatListAdapter extends ArrayAdapter<Message> {
 
     private ParseUser user;
+    private Model mModel;
 
     public ChatListAdapter(Context context, int resource,
                            List<Message> objects) {
         super(context, resource, objects);
         user = ParseUser.getCurrentUser();
+        mModel = Model.getInstance();
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -40,25 +44,27 @@ public class ChatListAdapter extends ArrayAdapter<Message> {
 
         Message message = getItem(position);
         if (message != null) {
-            TextView receiverLabel = (TextView) convertView
+            ImageView receiverLabel = (ImageView) convertView
                     .findViewById(R.id.receiverLabel);
             TextView messageLabel = (TextView) convertView
                     .findViewById(R.id.messagelabel);
-            TextView senderLabel = (TextView) convertView
+            ImageView senderLabel = (ImageView) convertView
                     .findViewById(R.id.senderLabel);
 
             messageLabel.setText(message.getMessage());
-            senderLabel.setText(message.getFrom());
 
             if (message.getTo().equalsIgnoreCase(user.getUsername()))
 
             {
-                receiverLabel.setText(message.getTo());
+                receiverLabel.setVisibility(View.VISIBLE);
+                receiverLabel.setImageBitmap(mModel.getTargetPlayerProfilePic());
+                senderLabel.setVisibility(View.GONE);
 
             } else {
-
-                receiverLabel.setText("");
+                senderLabel.setVisibility(View.VISIBLE);
+                senderLabel.setImageBitmap(mModel.getUserProfile());
                 receiverLabel.setVisibility(View.GONE);
+                //receiverLabel.setVisibility(View.GONE);
             }
         }
 

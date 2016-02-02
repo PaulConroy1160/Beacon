@@ -48,10 +48,17 @@ public class ListenerService extends WearableListenerService {
                 if (path.equals(WEARABLE_DATA_PATH)) {
                     dataMap = DataMapItem.fromDataItem(event.getDataItem()).getDataMap();
                     Log.d("on wearable", "Received on watch: " + dataMap);
-                    Toast.makeText(this, "hey", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(this, "hey", Toast.LENGTH_LONG).show();
+                    String operation = dataMap.getString("operation");
                     String content = dataMap.getString("message");
+                    String senderUserName = dataMap.getString("from");
 
-                    sendInformation(content);
+                    if (operation.equals("greeting")) {
+                        loadGreeting(content);
+                    }
+                    if (operation.equals("push")) {
+                        sendInformation(content, senderUserName);
+                    }
 
 
                     //sendNotification(content);
@@ -85,8 +92,17 @@ public class ListenerService extends WearableListenerService {
         notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
-    public void sendInformation(String t) {
+    public void sendInformation(String t, String sender) {
         Intent i = new Intent(this, DisplayMessage.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("information", t);
+        i.putExtra("sender", sender);
+        Log.d("message = ", t);
+        startActivity(i);
+    }
+
+    public void loadGreeting(String t) {
+        Intent i = new Intent(this, Greeting.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra("information", t);
         Log.d("message = ", t);

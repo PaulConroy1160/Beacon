@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/logo">
+        android:id="@+id/logo"
+        android:weightSum="1.0">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
             android:layout_gravity="center_vertical|center"
             android:src="@drawable/logo_top"
             android:background="@null"
-            android:layout_weight=".4" />
+            android:layout_weight=".6" />
 
         <TextView
             android:text="New User"
@@ -31,7 +32,8 @@
             android:id="@+id/nameText"
             android:textColor="#fff"
             android:textSize="30sp"
-            android:gravity="center_horizontal" />
+            android:gravity="center_horizontal"
+            android:layout_weight=".4" />
 
 
     </LinearLayout>
@@ -46,7 +48,8 @@
         android:layout_marginTop="50dp"
         android:background="#252339"
         android:layout_below="@id/logo"
-        android:id="@+id/list">
+        android:id="@+id/list"
+        android:weightSum="1.0">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -73,7 +76,8 @@
             android:paddingLeft="20dp"
             android:singleLine="true"
             android:textColorHint="#bbb"
-            android:background="#fff" />
+            android:background="#fff"
+            android:layout_weight=".2" />
 
         <EditText
             android:layout_width="fill_parent"
@@ -89,7 +93,8 @@
             android:paddingRight="20dp"
             android:singleLine="true"
             android:textColorHint="#bbb"
-            android:background="#fff" />
+            android:background="#fff"
+            android:layout_weight=".2" />
 
         <EditText
             android:layout_width="fill_parent"
@@ -105,7 +110,8 @@
             android:paddingRight="20dp"
             android:singleLine="true"
             android:textColorHint="#bbb"
-            android:background="#fff" />
+            android:background="#fff"
+            android:layout_weight=".2" />
 
         <EditText
             android:layout_width="fill_parent"
@@ -122,7 +128,8 @@
             android:paddingRight="20dp"
             android:singleLine="true"
             android:textColorHint="#bbb"
-            android:background="#fff" />
+            android:background="#fff"
+            android:layout_weight=".2" />
 
         <Button
             android:layout_width="fill_parent"
@@ -136,7 +143,8 @@
             android:layout_gravity="center_horizontal"
             android:background="#f1654c"
             android:onClick="next"
-            android:gravity="center|center_horizontal" />
+            android:gravity="center|center_horizontal"
+            android:layout_weight=".2" />
 
 
     </LinearLayout>

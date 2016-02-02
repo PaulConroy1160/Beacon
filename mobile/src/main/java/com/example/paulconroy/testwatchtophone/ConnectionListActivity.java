@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.paulconroy.testwatchtophone.Model.Connection;
@@ -49,6 +53,8 @@ public class ConnectionListActivity extends Activity {
     private ListView connectionList;
     private DB db;
     private ParseUser user;
+    private ImageView logo;
+    private TextView title;
     //private List<ParseObject> connections;
     private EditText messageField;
     private Button sendBTN;
@@ -66,6 +72,12 @@ public class ConnectionListActivity extends Activity {
         mModel = Model.getInstance();
         //Log.d("user is",user.get("userName").toString());
 
+        logo = (ImageView) findViewById(R.id.logoTop);
+        title = (TextView) findViewById(R.id.nameText);
+
+        logo.setVisibility(View.GONE);
+        title.setVisibility(View.GONE);
+
 
         connectionsList = new ArrayList<Connection>();
 
@@ -73,7 +85,7 @@ public class ConnectionListActivity extends Activity {
         m = Model.getInstance();
         db = new DB(this);
 
-        searchForConnections();
+        //searchForConnections();
         //messageList = new ArrayList<Message>();
         compareSize = 0;
 
@@ -82,6 +94,10 @@ public class ConnectionListActivity extends Activity {
 
 
         connectionList = (ListView) findViewById(R.id.connectionList);
+
+        connectionsList = mModel.getConnections();
+
+        changeAdapter(connectionsList);
 
         connectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,7 +119,9 @@ public class ConnectionListActivity extends Activity {
 //            Toast.makeText(this, "No Messages available", Toast.LENGTH_LONG).show();
 //        }
 
+        //setTestConnection();
 
+        loadAnimation();
     }
 
     private void changeAdapter(List<Connection> connections) {
@@ -121,16 +139,17 @@ public class ConnectionListActivity extends Activity {
         this.finish();
     }
 
-    public void setTestConnection(View v) {
+    public void setTestConnection() {
         ParseObject connection = new ParseObject("Connections");
-        connection.put("user1", "ronan");
-        connection.put("user2", "brendan");
+        connection.put("user1", user.getUsername());
+        connection.put("user2", "hix");
         connection.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
 
                 if (e == null) {
                     Log.d("connections", "saved");
+                    Toast.makeText(getApplication(), "CONNECTED TO HIX!", Toast.LENGTH_LONG).show();
                 } else {
                     Log.d("connections", "not saved, BOOO!!!");
                 }
@@ -143,10 +162,10 @@ public class ConnectionListActivity extends Activity {
 
         ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Connections");
         //need to change to username
-        query1.whereEqualTo("user1", "ronan");
+        query1.whereEqualTo("user1", user.getUsername());
 
         ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Connections");
-        query2.whereEqualTo("user2", "ronan");
+        query2.whereEqualTo("user2", user.getUsername());
 
         queries.add(query1);
         queries.add(query2);
@@ -178,10 +197,11 @@ public class ConnectionListActivity extends Activity {
                                 connectionsList.add(conn);
                                 //connections.add(object.get("user1").toString());
                             }
+                            Log.d("connections are", connectionsList.get(0).getUserName());
                         }
                     }
 
-                    Log.d("connections are", connectionsList.get(0).getUserName());
+
                     changeAdapter(connectionsList);
                 } else {
                     Log.d("alert", "errors...");
@@ -194,6 +214,16 @@ public class ConnectionListActivity extends Activity {
         Intent i = new Intent(this, ChatActivity.class);
         startActivity(i);
     }
+
+    public void loadAnimation() {
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_no_trans);
+        logo.setAnimation(fadeIn);
+        fadeIn.setStartOffset(500);
+        logo.setVisibility(View.VISIBLE);
+
+    }
+
+
 
 
 }

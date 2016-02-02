@@ -15,45 +15,17 @@
         android:layout_alignParentStart="true"
         android:id="@+id/logo">
 
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:layout_weight=".4"
-            android:layout_gravity="left"
-            android:src="@drawable/menubtn"
-            android:background="@null"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:layout_marginLeft="10dp"
-            android:onClick="" />
-
-        <LinearLayout
-            android:orientation="vertical"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight=".4">
-
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/logoTop"
-                android:layout_gravity="center_vertical|center"
-                android:src="@drawable/logo_top"
-                android:background="@null"
-                android:layout_weight=".4"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
-
-
-        </LinearLayout>
-
+            android:id="@+id/logoTop"
+            android:layout_gravity="center_vertical|center"
+            android:src="@drawable/logo_top"
+            android:background="@null"
+            android:layout_weight=".4" />
 
         <TextView
-            android:text="CONNECTIONS"
+            android:text="Upload Image"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:id="@+id/nameText"
@@ -71,18 +43,10 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#fff"
+        android:layout_marginTop="50dp"
+        android:background="#252339"
         android:layout_below="@id/logo"
         android:id="@+id/list">
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/connectionList"
-            android:layout_gravity="center_vertical"
-            android:layout_weight=".8"
-            android:stackFromBottom="true"
-            android:background="#252339" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -94,6 +58,34 @@
 
 
         </LinearLayout>
+
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:id="@+id/profilepic"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight=".3" />
+
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:text="Done!"
+            android:textSize="25dp"
+            android:id="@+id/submit"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:textColor="#252339"
+            android:layout_gravity="center_horizontal"
+            android:background="#f1654c"
+            android:onClick="submit"
+            android:gravity="center|center_horizontal"
+            android:layout_weight=".2" />
 
 
     </LinearLayout>
