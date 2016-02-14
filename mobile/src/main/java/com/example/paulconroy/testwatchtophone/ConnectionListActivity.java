@@ -1,17 +1,21 @@
 package com.example.paulconroy.testwatchtophone;
 
-import android.app.Activity;
-import android.content.Context;
+
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,16 +39,21 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import Database.DB;
 
+
 /**
  * Created by paulconroy on 02/01/2016.
  */
-public class ConnectionListActivity extends Activity {
+public class ConnectionListActivity extends AppCompatActivity {
 
     private Model m;
     //private List connectionList;
@@ -61,6 +70,11 @@ public class ConnectionListActivity extends Activity {
     private ListAdapter adapter;
     private Calendar c = Calendar.getInstance();
     private Model mModel;
+    private ListView mDrawerList;
+    private ArrayAdapter<String> mAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private String mActivityTitle;
+    private DrawerLayout mDrawerLayout;
 
 
     @Override
@@ -68,15 +82,36 @@ public class ConnectionListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connections);
 
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        addDrawerItems();
+        setupDrawer();
+        setActionBar();
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    Intent i = new Intent(getApplicationContext(), Profile.class);
+                    startActivity(i);
+                }
+
+                if (position == 1) {
+                    Intent i = new Intent(getApplicationContext(), ConnectionListActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
+
+
+
+
         user = ParseUser.getCurrentUser();
         mModel = Model.getInstance();
         //Log.d("user is",user.get("userName").toString());
 
-        logo = (ImageView) findViewById(R.id.logoTop);
         title = (TextView) findViewById(R.id.nameText);
-
-        logo.setVisibility(View.GONE);
-        title.setVisibility(View.GONE);
 
 
         connectionsList = new ArrayList<Connection>();
@@ -111,17 +146,6 @@ public class ConnectionListActivity extends Activity {
             }
         });
 
-
-//        if (!messageList.isEmpty()) {
-//            changeAdapter(messageList);
-//            //loadAnimation();
-//        } else {
-//            Toast.makeText(this, "No Messages available", Toast.LENGTH_LONG).show();
-//        }
-
-        //setTestConnection();
-
-        loadAnimation();
     }
 
     private void changeAdapter(List<Connection> connections) {
@@ -215,16 +239,95 @@ public class ConnectionListActivity extends Activity {
         startActivity(i);
     }
 
-    public void loadAnimation() {
-        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in_no_trans);
-        logo.setAnimation(fadeIn);
-        fadeIn.setStartOffset(500);
-        logo.setVisibility(View.VISIBLE);
 
+    private void addDrawerItems() {
+        String[] osArray = {"My Profile", "Connections", "Search", "Settings"};
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mDrawerList.setAdapter(mAdapter);
+    }
+
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+
+            /**
+             * Called when a drawer has settled in a completely open state.
+             */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /**
+             * Called when a drawer has settled in a completely closed state.
+             */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+
+            //Toast.makeText(this,"item"+id,Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        // Activate the navigation drawer toggle
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void makeToast(String toast) {
+        Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
+    }
+
+    private void setActionBar() {
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#252339")));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.logo_ab);
+        getSupportActionBar().setElevation(0);
     }
 
 
-
-
 }
+
+
 

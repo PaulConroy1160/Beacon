@@ -1,46 +1,38 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="#252339"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/drawer_layout"
+    android:background="#fff">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:background="#252339">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:background="#252339"
             android:id="@+id/logo">
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageButton"
-                android:layout_weight=".4"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
                 android:layout_gravity="left"
-                android:src="@drawable/menubtn"
                 android:background="@null"
                 android:layout_marginLeft="10dp"
                 android:onClick="" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/logoTop"
-                android:layout_gravity="center_vertical|center"
-                android:src="@drawable/logo_top"
-                android:background="@null"
-                android:layout_weight=".4" />
-        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
@@ -48,26 +40,58 @@
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="#fff"
-            android:id="@+id/list">
+            android:background="#fff">
+
+
+        </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="20dp">
+
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/profilePic"
+                android:scaleType="center"
+                android:layout_gravity="center"
+                android:background="#fff" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
-                android:id="@+id/textView"
-                android:layout_gravity="center_horizontal" />
+                android:layout_marginTop="20dp"
+                android:text="Paul Conroy"
+                android:id="@+id/fullname" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:textColor="#bbb"
+                android:text="PaulyC"
+                android:id="@+id/username" />
+
         </LinearLayout>
 
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="New Text"
-            android:id="@+id/textView2"
-            android:background="#bbb"
-            android:layout_gravity="center_horizontal|top" />
-
     </FrameLayout>
-</LinearLayout>
+
+    <ListView
+        android:id="@+id/navList"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|start"
+        android:background="#fff" />
+</android.support.v4.widget.DrawerLayout>

@@ -1,7 +1,9 @@
 package com.example.paulconroy.testwatchtophone.Model;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
+import com.example.paulconroy.testwatchtophone.Reply;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 
@@ -20,6 +22,7 @@ public class Model {
     private List<Connection> connectionsList = new ArrayList<Connection>();
     private Bitmap profilePic;
     private Bitmap targetPlayerProfilePic;
+    private Reply reply;
 
     // synchronized locks method
     public static synchronized Model getInstance() {
@@ -86,13 +89,24 @@ public class Model {
 
     public List<Message> sortMessage(List<Message> messages, String user) {
         List<Message> filteredList = new ArrayList<Message>();
+        filteredList.clear();
         for (Message message : messages) {
-            if (message.getTo().equals(user)) {
+            if (message.getTo().equals(targetConnection) || message.getFrom().equals(targetConnection)) {
                 filteredList.add(message);
+            } else {
+                Log.d("Message: ", "from: " + message.getFrom() + " to: " + message.getTo());
             }
         }
 
         return filteredList;
+    }
+
+    public Reply getReply() {
+        return this.reply;
+    }
+
+    public void setReply(Reply r) {
+        this.reply = r;
     }
 
 

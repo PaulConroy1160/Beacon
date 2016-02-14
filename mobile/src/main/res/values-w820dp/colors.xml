@@ -8,4 +8,6 @@
     <color name="red_normal">@android:color/holo_red_light</color>
     <color name="orange_pressed">#ffff8800</color>
     <color name="orange_normal">#ffffbb33</color>
+    <color name="actionbar_color">#bf360c</color>
+    <color name="drawer_arrow_second_color">#303f9f</color>
 </resources>

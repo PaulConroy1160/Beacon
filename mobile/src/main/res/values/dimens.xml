@@ -5,4 +5,5 @@
 
     <dimen name="corner_radius">0dp</dimen>
     <dimen name="layer_padding">12dp</dimen>
+    <dimen name="navdrawer_width">260dp</dimen>
 </resources>

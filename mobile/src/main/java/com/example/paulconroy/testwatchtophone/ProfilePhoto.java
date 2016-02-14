@@ -44,12 +44,14 @@ public class ProfilePhoto extends Activity {
         setContentView(R.layout.activity_profile_picture);
 
         mProfilePic = (ImageView) findViewById(R.id.profilepic);
+        Intent i = getIntent();
 
         fName = getIntent().getStringExtra("fName");
         lName = getIntent().getStringExtra("lName");
         userName = getIntent().getStringExtra("userName");
         password = getIntent().getStringExtra("password");
         bioText = getIntent().getStringExtra("bioText");
+
 
         submit = (Button) findViewById(R.id.submit);
 

@@ -135,7 +135,7 @@ public class Greeting extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                connectionsActivity();
+                dashBoard();
             }
 
             @Override
@@ -159,5 +159,10 @@ public class Greeting extends Activity {
         //-1 to not repeat
         final int indexInPatternToRepeat = -1;
         vibrator.vibrate(pattern, indexInPatternToRepeat);
+    }
+
+    private void dashBoard() {
+        Intent i = new Intent(this, DashBoard.class);
+        startActivity(i);
     }
 }

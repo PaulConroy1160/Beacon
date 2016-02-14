@@ -51,6 +51,7 @@ public class Loading extends Activity {
 
         mModel = Model.getInstance();
 
+
         user = ParseUser.getCurrentUser();
         typeFace = Typeface.createFromAsset(getAssets(), "fonts/muli.ttf");
 
@@ -63,6 +64,7 @@ public class Loading extends Activity {
         welcomeText.setTypeface(typeFace);
 
         welcomeText.setText("Welcome, " + user.getUsername() + "!");
+
 
         loadAnimation();
 
@@ -299,7 +301,6 @@ public class Loading extends Activity {
 
 
     }
-
 
 
 }
