@@ -84,7 +84,6 @@ public class Login extends Activity {
         typeFace = Typeface.createFromAsset(getAssets(), "fonts/muli.ttf");
 
 
-
         install = ParseInstallation.getCurrentInstallation();
 
 
@@ -147,8 +146,6 @@ public class Login extends Activity {
 
             findUsername(usernameText, passwordText);
         }
-
-
 
 
     }
@@ -219,7 +216,6 @@ public class Login extends Activity {
             }
         });
     }
-
 
 
 }

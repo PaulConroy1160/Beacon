@@ -1,6 +1,8 @@
 package com.example.paulconroy.testwatchtophone;
 
 
+import java.util.ArrayList;
+
 /**
  * Created by paulconroy on 10/01/2016.
  */
@@ -11,6 +13,8 @@ public class Model {
     private String messageContent;
     private String sender;
     private String replyString;
+    private ArrayList<String> connectionsList;
+    private Boolean voiceOnly;
 
 
     // synchronized locks method
@@ -43,5 +47,21 @@ public class Model {
 
     public void setSender(String s) {
         this.sender = s;
+    }
+
+    public ArrayList<String> getConnectionsList() {
+        return connectionsList;
+    }
+
+    public void setConnectionsList(ArrayList<String> connectionsList) {
+        this.connectionsList = connectionsList;
+    }
+
+    public Boolean getVoiceOnly() {
+        return voiceOnly;
+    }
+
+    public void setVoiceOnly(Boolean voiceOnly) {
+        this.voiceOnly = voiceOnly;
     }
 }

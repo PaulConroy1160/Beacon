@@ -6,7 +6,14 @@
     android:background="#fff">
 
 
-    <LinearLayout
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#252339"
+        tools:context=".MainActivity">
+
+        <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,38 +21,33 @@
         android:layout_alignParentStart="true"
         android:id="@+id/logo">
 
-        <ImageButton
+            <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:layout_weight=".4"
-            android:layout_gravity="left"
-            android:src="@drawable/menubtn"
-            android:background="@null"
-            android:layout_marginLeft="10dp"
-            android:onClick="" />
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/logoTop"
-            android:layout_gravity="center_vertical|center"
-            android:src="@drawable/logo_top"
-            android:background="@null"
-            android:layout_weight=".4" />
+                <TextView
+                    android:text="PLACEHOLDER"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nameText"
+                    android:textColor="#f1654c"
+                    android:textSize="25sp"
+                    android:gravity="center_horizontal" />
 
-
-        <TextView
-            android:text="MESSAGES"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:id="@+id/nameText"
-            android:textColor="#fff"
-            android:textSize="30sp"
-            android:gravity="center_horizontal"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:id="@+id/imageView"
+                    android:background="#403c61"
+                    android:layout_gravity="center_horizontal" />
 
 
-    </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
 
 
     <LinearLayout
@@ -58,47 +60,54 @@
         android:layout_below="@id/logo"
         android:id="@+id/list">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/chatList"
-        android:layout_gravity="center_vertical"
-        android:layout_weight=".8"
-        android:stackFromBottom="true" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#fff">
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/messageField"
-        android:layout_weight=".8"
-        android:background="#b9b9b9"
-
-        />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        <ListView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:text="SEND"
-            android:id="@+id/sendBTN"
-            android:layout_weight=".2"
-            android:onClick="sendMessage" />
+            android:id="@+id/chatList"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".8"
+            android:background="#403c61"
+            android:stackFromBottom="true" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#252339">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:paddingLeft="10dp"
+                android:textColor="#1abc9c"
+                android:hint="Write Something..."
+                android:id="@+id/messageField"
+                android:layout_weight=".8"
+                android:background="#fff"
+
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="#f1654c"
+                android:text="SEND"
+                android:textColor="#fff"
+                android:id="@+id/sendBTN"
+                android:padding="10dp"
+                android:layout_weight=".2"
+                android:onClick="sendMessage" />
+
+
+        </LinearLayout>
 
 
     </LinearLayout>
-
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/navList"

@@ -77,14 +77,10 @@ public class MainActivityWear extends Activity
         displaySpeech();
 
 
-
     }
 
 
-
-
-
-    private void displaySpeech(){
+    private void displaySpeech() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -93,7 +89,7 @@ public class MainActivityWear extends Activity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String message = results.get(0);
 
@@ -104,7 +100,7 @@ public class MainActivityWear extends Activity
                     sendMessage(stripMessage);
                 }
             } else {
-                Toast.makeText(this,"drop this message",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "drop this message", Toast.LENGTH_LONG).show();
             }
 
 
@@ -118,14 +114,14 @@ public class MainActivityWear extends Activity
                 .setResultCallback(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
                     @Override
                     public void onResult(NodeApi.GetConnectedNodesResult nodes) {
-                        for(Node node:nodes.getNodes()){
-                            if(node != null && node.isNearby()){
+                        for (Node node : nodes.getNodes()) {
+                            if (node != null && node.isNearby()) {
                                 mNode = node;
-                                Log.d(WEARABLE_MAIN,"CONNECTED TO: "+node.getDisplayName());
+                                Log.d(WEARABLE_MAIN, "CONNECTED TO: " + node.getDisplayName());
                             }
                         }
-                        if(mNode == null){
-                            Log.d(WEARABLE_MAIN,"NOT CONNECTED");
+                        if (mNode == null) {
+                            Log.d(WEARABLE_MAIN, "NOT CONNECTED");
                         }
                     }
 
@@ -154,19 +150,18 @@ public class MainActivityWear extends Activity
         mGoogleApiClient.disconnect();
     }
 
-    public void sendMessage(String message){
+    public void sendMessage(String message) {
         String beacon = message;
-        if(mNode != null && mGoogleApiClient != null){
+        if (mNode != null && mGoogleApiClient != null) {
             Wearable.MessageApi.sendMessage(mGoogleApiClient,
-                    mNode.getId(),WEAR_PATH,beacon.getBytes())
+                    mNode.getId(), WEAR_PATH, beacon.getBytes())
                     .setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
                         @Override
                         public void onResult(MessageApi.SendMessageResult sendMessageResult) {
-                            if(!sendMessageResult.getStatus().isSuccess()){
-                                Log.d("Message not sent", ""+ sendMessageResult.getStatus().getStatusCode());
-                            }
-                            else{
-                                Log.d(WEARABLE_MAIN,"Message succeeded");
+                            if (!sendMessageResult.getStatus().isSuccess()) {
+                                Log.d("Message not sent", "" + sendMessageResult.getStatus().getStatusCode());
+                            } else {
+                                Log.d(WEARABLE_MAIN, "Message succeeded");
                             }
                         }
                     });

@@ -18,7 +18,7 @@ public class DB extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "beaconDB";
@@ -39,7 +39,7 @@ public class DB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_MESSAGES_TABLE = "CREATE TABLE " + TABLE_CONNECTIONS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_USERNAME + " TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_USERNAME + " TEXT"
                 + ")";
         db.execSQL(CREATE_MESSAGES_TABLE);
     }
@@ -54,7 +54,7 @@ public class DB extends SQLiteOpenHelper {
     }
 
     // Adding new contact
-    public void addMessage(Connection connection) {
+    public void addConnection(Connection connection) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -90,5 +90,11 @@ public class DB extends SQLiteOpenHelper {
 
         // return contact list
         return connectionList;
+    }
+
+    public void removeAllConnections() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CONNECTIONS, null, null);
+        db.close();
     }
 }

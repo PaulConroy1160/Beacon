@@ -23,7 +23,7 @@ public class DB extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     // Database Name
     private static final String DATABASE_NAME = "beaconDB";
@@ -37,6 +37,7 @@ public class DB extends SQLiteOpenHelper {
     private static final String KEY_FROM = "sender";
     private static final String KEY_MESSAGE = "message";
     private static final String KEY_TIME = "time";
+
 
     public DB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

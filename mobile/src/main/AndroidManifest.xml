@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.paulconroy.testwatchtophone" >
+    package="com.example.paulconroy.testwatchtophone">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,7 +17,8 @@
       IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
       to match your app's package name + ".permission.C2D_MESSAGE".
     -->
-    <permission android:protectionLevel="signature"
+    <permission
+        android:protectionLevel="signature"
         android:name="com.example.paulconroy.testwatchtophone.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.example.paulconroy.testwatchtophone.permission.C2D_MESSAGE" />
 
@@ -26,7 +27,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -42,6 +43,7 @@
         <activity
             android:name=".Profile"
             android:label="@string/app_name"
+            android:noHistory="true"
             android:screenOrientation="portrait">
 
         </activity>
@@ -97,16 +99,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".ListenerServiceFromWear">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER"></action>
             </intent-filter>
         </service>
-        <meta-data android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDD6iLwMCJhb2CuP64frYjrFkXIjygIpwo"/>
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDD6iLwMCJhb2CuP64frYjrFkXIjygIpwo" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <service android:name="com.parse.PushService" />
 
         <receiver
@@ -119,7 +126,8 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -136,13 +144,13 @@
 
         <service android:name=".PushToWearable" />
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
 
 
 </manifest>

@@ -12,7 +12,7 @@ public class Beacon {
     private String date;
     private String likes;
 
-    public Beacon(){
+    public Beacon() {
         this.sender = null;
         this.message = null;
         this.location = null;
@@ -21,7 +21,7 @@ public class Beacon {
     }
 
 
-    public Beacon(int i, String s, String m, String l, String d, String li){
+    public Beacon(int i, String s, String m, String l, String d, String li) {
         this.id = i;
         this.sender = s;
         this.message = m;
@@ -30,11 +30,11 @@ public class Beacon {
         this.likes = li;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
-    public void setId(int i){
+    public void setId(int i) {
         this.id = i;
     }
 }

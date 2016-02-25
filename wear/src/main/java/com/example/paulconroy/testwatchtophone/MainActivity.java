@@ -3,12 +3,16 @@ package com.example.paulconroy.testwatchtophone;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import adapter.FragmentAdapter;
@@ -22,6 +26,7 @@ public class MainActivity extends Activity {
     private String messageText;
     private String sender;
     private Model mModel;
+    private Animation anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,8 @@ public class MainActivity extends Activity {
 
         mModel.setMessageContent(messageText);
         mModel.setSender(sender);
+
+        anim = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -71,26 +78,28 @@ public class MainActivity extends Activity {
 
     public void commitFunction(int position) {
         if (position == 0) {
-            Toast.makeText(this, "Reply Function", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Reply Function", Toast.LENGTH_LONG).show();
             //mViewPager.setCurrentItem(1);
             sendReply();
-            this.finish();
+            //Add sent message animation
         } else if (position == 2) {
-            Toast.makeText(this, "Decline Function", Toast.LENGTH_LONG).show();
-            mViewPager.setCurrentItem(1);
+            dismissMessage();
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.finish();
-    }
 
     public void sendReply() {
         Intent i = new Intent(this, SendMessage.class);
         startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
+        mViewPager.setCurrentItem(1);
     }
 
-
+    public void dismissMessage() {
+        this.finish();
+        System.exit(0);
+    }
 }
+
+
+

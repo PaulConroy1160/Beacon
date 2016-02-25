@@ -15,19 +15,24 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import DataBase.DB;
+
 /**
  * Created by paulconroy on 06/01/2016.
  */
 public class ListenerService extends WearableListenerService {
 
     private static final String WEARABLE_DATA_PATH = "/wearable_data";
+    private DB db;
 
     private int notificationId = 001;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("test", "Inside wearable service");
-
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -53,11 +58,18 @@ public class ListenerService extends WearableListenerService {
                     String content = dataMap.getString("message");
                     String senderUserName = dataMap.getString("from");
 
+
                     if (operation.equals("greeting")) {
                         loadGreeting(content);
+                        List<String> connections = dataMap.getStringArrayList("connections");
+                        saveConnections(connections);
                     }
                     if (operation.equals("push")) {
                         sendInformation(content, senderUserName);
+                    }
+                    if (operation.equals("update")) {
+
+                        //Add connection here
                     }
 
 
@@ -107,6 +119,27 @@ public class ListenerService extends WearableListenerService {
         i.putExtra("information", t);
         Log.d("message = ", t);
         startActivity(i);
+    }
+
+    public void saveConnections(List<String> connectionsList) {
+        db = new DB(this);
+        List<Connection> compare = db.getAllConnections();
+        Log.d("compare size is:", " " + compare.size());
+        Log.d("connectionList size is:", " " + connectionsList.size());
+        if (compare.size() != connectionsList.size()) {
+            Log.d("alert", "inside saveConnections if");
+            db.removeAllConnections();
+            for (String username : connectionsList) {
+                Connection conn = new Connection();
+                conn.setId(-1);
+                conn.setUsername(username);
+                db.addConnection(conn);
+                Log.d("connection saved to db:", username);
+            }
+
+            Log.d("connections saved", "true");
+        }
+
     }
 }
 

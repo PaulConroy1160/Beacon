@@ -26,4 +26,27 @@
         android:layout_marginTop="10dp"
         android:id="@+id/confirmation"
         android:layout_gravity="center_horizontal|top" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:src="@drawable/accept_tag"
+        android:layout_gravity="left|center_vertical" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView5"
+        android:src="@drawable/decline_tag"
+        android:layout_gravity="right|center_vertical" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Swipe Right To Send"
+        android:textColor="#b9b9b9"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>

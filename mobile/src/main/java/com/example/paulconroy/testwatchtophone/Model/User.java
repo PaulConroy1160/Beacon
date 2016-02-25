@@ -16,7 +16,7 @@ public class User {
     private String bio;
     private Bitmap photo;
 
-    public User(){
+    public User() {
         id = 0;
         fName = "";
         lName = "";

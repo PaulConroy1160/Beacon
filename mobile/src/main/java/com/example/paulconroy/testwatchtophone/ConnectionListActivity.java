@@ -1,9 +1,14 @@
 package com.example.paulconroy.testwatchtophone;
 
 
+import android.app.ActionBar;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +16,11 @@ import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -64,6 +71,9 @@ public class ConnectionListActivity extends AppCompatActivity {
     private ParseUser user;
     private ImageView logo;
     private TextView title;
+    private Handler handler;
+    private Handler handler2;
+    private String compareText;
     //private List<ParseObject> connections;
     private EditText messageField;
     private Button sendBTN;
@@ -75,6 +85,8 @@ public class ConnectionListActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private DrawerLayout mDrawerLayout;
+    private Typeface typeFace;
+    private String[] menuItems;
 
 
     @Override
@@ -82,8 +94,16 @@ public class ConnectionListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connections);
 
+        typeFace = Typeface.createFromAsset(getAssets(), "fonts/muli.ttf");
+
+        mModel = Model.getInstance();
+
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        db = new DB(this);
+
+
 
         addDrawerItems();
         setupDrawer();
@@ -93,25 +113,33 @@ public class ConnectionListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
                     Intent i = new Intent(getApplicationContext(), Profile.class);
                     startActivity(i);
+                    overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
                 }
-
                 if (position == 1) {
-                    Intent i = new Intent(getApplicationContext(), ConnectionListActivity.class);
-                    startActivity(i);
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    connectDialog();
+                }
+                if (position == 2) {
+                    //enable handsfree
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    handsFreeToggle();
+                }
+                if (position == 3) {
+                    logOut();
                 }
             }
         });
 
 
-
-
         user = ParseUser.getCurrentUser();
-        mModel = Model.getInstance();
+
         //Log.d("user is",user.get("userName").toString());
 
         title = (TextView) findViewById(R.id.nameText);
+
 
 
         connectionsList = new ArrayList<Connection>();
@@ -130,29 +158,52 @@ public class ConnectionListActivity extends AppCompatActivity {
 
         connectionList = (ListView) findViewById(R.id.connectionList);
 
+
         connectionsList = mModel.getConnections();
 
         changeAdapter(connectionsList);
 
-        connectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Connection connection = (Connection) connectionList.getItemAtPosition(position);
+//        connectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Connection connection = (Connection) connectionList.getItemAtPosition(position);
+//
+//
+//                Log.d("list item is:", connection.getUserName());
+//                mModel.setTargetConnection(connection.getUserName());
+//                startChat();
+//
+//
+//            }
+//        });
 
 
-                Log.d("list item is:", connection.getUserName());
-                mModel.setTargetConnection(connection.getUserName());
-                startChat();
+        handler2 = new Handler();
+
+        Runnable r2 = new Runnable() {
+            public void run() {
+
+                if (mModel.getOnConnectionListChange() == true) {
+                    Log.d("inside", "if r2 runnable");
+                    mModel.setOnConnectionListChange(false);
+                    changeAdapter(mModel.getConnections());
+
+                }
+                connectionList.deferNotifyDataSetChanged();
+                handler2.postDelayed(this, 300);
             }
-        });
+        };
+
+        handler2.postDelayed(r2, 300);
 
     }
 
     private void changeAdapter(List<Connection> connections) {
-
+        Log.d("inside", "changeAdapter");
         adapter = new ConnectionListAdapter(this,
                 R.id.connectionList, connections);
         connectionList.setAdapter(adapter);
+        connectionList.deferNotifyDataSetChanged();
     }
 
 
@@ -237,11 +288,19 @@ public class ConnectionListActivity extends AppCompatActivity {
     public void startChat() {
         Intent i = new Intent(this, ChatActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
     }
 
 
     private void addDrawerItems() {
-        String[] osArray = {"My Profile", "Connections", "Search", "Settings"};
+        String voiceEnable;
+
+        if (!mModel.getWearableFound()) {
+            voiceEnable = "OFF";
+        } else {
+            voiceEnable = "ON";
+        }
+        String[] osArray = {"My Profile", "Search", "WEARABLE [" + voiceEnable + "]", "Logout"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
@@ -262,7 +321,8 @@ public class ConnectionListActivity extends AppCompatActivity {
              */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
+                // creates call to onPrepareOptionsMenu()
             }
         };
 
@@ -297,12 +357,7 @@ public class ConnectionListActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
 
-            //Toast.makeText(this,"item"+id,Toast.LENGTH_LONG).show();
-            return true;
-        }
 
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -317,17 +372,126 @@ public class ConnectionListActivity extends AppCompatActivity {
     }
 
     private void setActionBar() {
+//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#252339")));
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setIcon(R.drawable.logo_ab);
+//        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#252339")));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.logo_ab);
         getSupportActionBar().setElevation(0);
+        getSupportActionBar().setCustomView(R.layout.ab_layout);
+    }
+
+    private void handsFreeToggle() {
+        if (!mModel.getWearableFound()) {
+            Toast.makeText(this, "NO WEARABLE DISCOVERED", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "WEARABLE DISCOVERED", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void connectDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_dialog);
+
+
+        final TextView title = (TextView) dialog.findViewById(R.id.dialog_title);
+        title.setTypeface(typeFace);
+
+        final Button viewProfile = (Button) dialog.findViewById(R.id.dialog_view_btn);
+        viewProfile.setTypeface(typeFace);
+        viewProfile.setVisibility(View.INVISIBLE);
+
+        final EditText connectionUser = (EditText) dialog.findViewById(R.id.text_dialog);
+        connectionUser.setTypeface(typeFace);
+        handler = new Handler();
+
+        Runnable r = new Runnable() {
+            public void run() {
+                final String text = connectionUser.getText().toString().trim();
+
+
+                ParseQuery<ParseUser> query = ParseUser.getQuery();
+                query.whereEqualTo("username", text);
+
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> objects, com.parse.ParseException e) {
+                        Log.d("there is: ", "" + objects.size() + " found");
+
+                        compareText = text;
+
+                        if (!objects.isEmpty()) {
+                            Log.d("user name", "found!");
+                            title.setText("USER FOUND");
+                            title.setBackgroundColor(Color.parseColor("#1abc9c"));
+                            title.setTextColor(Color.parseColor("#ffffff"));
+                            viewProfile.setVisibility(View.VISIBLE);
+                            viewProfile.setClickable(true);
+                        } else {
+                            Log.d("user name", "not found...");
+                            title.setText("FIND USER");
+                            title.setBackgroundColor(Color.parseColor("#252339"));
+                            title.setTextColor(Color.parseColor("#f1654c"));
+                            viewProfile.setVisibility(View.INVISIBLE);
+                            viewProfile.setClickable(false);
+                        }
+                    }
+                });
+                handler.postDelayed(this, 300);
+            }
+        };
+
+        handler.postDelayed(r, 300);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialog_view_btn);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                final String username = connectionUser.getText().toString().trim();
+                userProfile(username);
+                dialog.dismiss();
+                // }
+
+            }
+
+        });
+
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacksAndMessages(null);
+                Log.d("handler has stopped", "dialog dismissed");
+            }
+        });
+        dialog.show();
+    }
+
+    private void userProfile(String user) {
+        Intent i = new Intent(this, Profile.class);
+        i.putExtra("username", user);
+        startActivity(i);
+    }
+
+    public void logOut() {
+        ParseUser.logOut();
+        this.finish();
     }
 
 
 }
+
+
 
 
 

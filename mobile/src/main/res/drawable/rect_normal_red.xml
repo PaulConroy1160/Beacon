@@ -1,8 +1,8 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/rect_pressed_red"/>
+    <item android:drawable="@drawable/rect_pressed_red" />
     <item android:bottom="@dimen/layer_padding">
-        <shape android:shape="rectangle" >
+        <shape android:shape="rectangle">
             <corners android:radius="@dimen/corner_radius" />
 
             <solid android:color="#ffff4444" />

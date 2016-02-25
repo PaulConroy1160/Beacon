@@ -33,16 +33,13 @@ public class SendMessage extends Activity implements
         GoogleApiClient.OnConnectionFailedListener {
 
     private Node mNode;
-    private Reply reply;
     private GoogleApiClient mGoogleApiClient;
     private static final String WEAR_PATH = "/from-wear";
     public static final String WEARABLE_MAIN = "wearableMain";
     private ViewPager mViewPager;
     private static final int SPEECH_REQUEST_CODE = 1002;
-    private GestureDetector mGestureDetector;
     private FragmentAdapter adapter;
     private String messageText;
-    private String sender;
     private Model mModel;
 
 
@@ -171,7 +168,8 @@ public class SendMessage extends Activity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Toast.makeText(this, "unable to reach phone", Toast.LENGTH_LONG).show();
+        this.finish();
     }
 
     @Override
@@ -204,8 +202,10 @@ public class SendMessage extends Activity implements
                         public void onResult(MessageApi.SendMessageResult sendMessageResult) {
                             if (!sendMessageResult.getStatus().isSuccess()) {
                                 Log.d("Message not sent", "" + sendMessageResult.getStatus().getStatusCode());
+                                endActivity();
                             } else {
                                 Log.d(WEARABLE_MAIN, "Message succeeded");
+                                endActivity();
                             }
                         }
                     });
@@ -217,5 +217,10 @@ public class SendMessage extends Activity implements
         ObjectOutputStream os = new ObjectOutputStream(out);
         os.writeObject(r);
         return out.toByteArray();
+    }
+
+    private void endActivity() {
+        this.finish();
+        System.exit(0);
     }
 }

@@ -102,10 +102,6 @@ public class NewUser extends Activity {
         });
 
 
-
-
-
-
     }
 
     public void next(View v) {

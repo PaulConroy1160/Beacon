@@ -1,6 +1,7 @@
 package com.example.paulconroy.testwatchtophone;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
@@ -66,7 +67,15 @@ public class DashBoard extends Activity {
 
     public void messageBTNHandler(View v) {
         Toast.makeText(this, "Message btn clicked", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(this, Messages.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.finish();
+    }
 }
 

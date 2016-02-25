@@ -2,13 +2,16 @@ package com.example.paulconroy.testwatchtophone;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -16,9 +19,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -66,6 +71,7 @@ public class ChatActivity extends AppCompatActivity {
     private Model mModel;
     private List messageList;
     private int compareSize;
+    private String compareText;
     private ListView chatList;
     private DB db;
     private ParseUser user;
@@ -79,6 +85,9 @@ public class ChatActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private DrawerLayout mDrawerLayout;
+    private TextView nameText;
+    private Typeface typeFace;
+    private Handler handler;
 
 
     @Override
@@ -89,6 +98,8 @@ public class ChatActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        typeFace = Typeface.createFromAsset(getAssets(), "fonts/muli.ttf");
+
         addDrawerItems();
         setupDrawer();
 
@@ -96,35 +107,58 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
                     Intent i = new Intent(getApplicationContext(), Profile.class);
                     startActivity(i);
                 }
 
                 if (position == 1) {
-                    Intent i = new Intent(getApplicationContext(), ConnectionListActivity.class);
-                    startActivity(i);
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    ChatActivity.this.finish();
+                }
+
+                if (position == 2) {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    connectDialog();
                 }
             }
         });
 
+//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#252339")));
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setIcon(R.drawable.logo_ab);
+
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#252339")));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.logo_ab);
+        getSupportActionBar().setCustomView(R.layout.ab_layout);
 
         user = ParseUser.getCurrentUser();
         //Log.d("user is",user.get("userName").toString());
         messageField = (EditText) findViewById(R.id.messageField);
+        messageField.setTypeface(typeFace);
         sendBTN = (Button) findViewById(R.id.sendBTN);
+        sendBTN.setTypeface(typeFace);
+        sendBTN.setText("....");
+        sendBTN.getBackground().setAlpha(128);
+        sendBTN.setClickable(false);
 
-        checkMissedMessages();
+
+        //checkMissedMessages();
 
 
         mModel = Model.getInstance();
         targetConnection = mModel.getTargetConnection();
         db = new DB(this);
+
+        nameText = (TextView) findViewById(R.id.nameText);
+
+        nameText.setText(targetConnection);
+        nameText.setTypeface(typeFace);
 
 
         messageList = new ArrayList<Message>();
@@ -133,12 +167,13 @@ public class ChatActivity extends AppCompatActivity {
         //REMOVE WHEN TESTING
         messageList = db.getAllMessages();
 
-        //messageList = mModel.sortMessage(messageList, user.getUsername());
-
         chatList = (ListView) findViewById(R.id.chatList);
-        sendBTN.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        chatList.setDivider(null);
+        //sendBTN.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         getTargetInformation();
+
+        submitValidation();
 
         checkUpdates();
 
@@ -176,7 +211,6 @@ public class ChatActivity extends AppCompatActivity {
 
         ParsePush push = new ParsePush();
         push.setQuery(query);
-        //push.setMessage(messageText);
         push.setData(data);
 
         push.sendInBackground();
@@ -185,10 +219,8 @@ public class ChatActivity extends AppCompatActivity {
         storeMessage(messageText);
         messageList = db.getAllMessages();
 
-        //messageList = mModel.sortMessage(messageList, user.getUsername());
         changeAdapter(messageList);
         messageField.setText("");
-        //chatList.setSelection(adapter.getCount() - 1);
 
     }
 
@@ -213,7 +245,6 @@ public class ChatActivity extends AppCompatActivity {
 
 
         ParseObject messageObj = new ParseObject("Messages");
-        //messageObj.put("sender", user.getUsername());
         //need to change to username
         messageObj.put("sender", user.getUsername());
         messageObj.put("receiver", targetConnection);
@@ -341,8 +372,6 @@ public class ChatActivity extends AppCompatActivity {
 
                                     mModel.setTargetPlayerProfilePic(picture);
                                     loadChatMessages();
-
-
                                 }
                             }
                         });
@@ -368,7 +397,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = {"My Profile", "Connections", "Search", "Settings"};
+        String[] osArray = {"My Profile", "Connections", "Search"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
@@ -420,12 +449,7 @@ public class ChatActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
 
-            //Toast.makeText(this,"item"+id,Toast.LENGTH_LONG).show();
-            return true;
-        }
 
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -439,6 +463,125 @@ public class ChatActivity extends AppCompatActivity {
         Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
     }
 
+    public void submitValidation() {
+        //FIX THIS, RUNS AFTER ACTIVITY IS CLOSED - USE ONSTOP METHOD REMOVE CALLBACKS.
+        final Handler submitHandler = new Handler();
+
+        final Runnable r = new Runnable() {
+            public void run() {
+                checkText();
+                submitHandler.postDelayed(this, 500);
+            }
+        };
+
+        submitHandler.postDelayed(r, 500);
+    }
+
+    public void checkText() {
+
+        if (messageField.getText().length() != 0) {
+            sendBTN.setText("SEND");
+            sendBTN.setBackgroundColor(Color.parseColor("#f1654c"));
+            sendBTN.setClickable(true);
+            sendBTN.getBackground().setAlpha(255);
+        } else {
+            sendBTN.setText("....");
+            sendBTN.getBackground().setAlpha(128);
+            sendBTN.setClickable(false);
+
+        }
+
+    }
+
+    public void connectDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_dialog);
+
+
+        final TextView title = (TextView) dialog.findViewById(R.id.dialog_title);
+        title.setTypeface(typeFace);
+
+        final Button viewProfile = (Button) dialog.findViewById(R.id.dialog_view_btn);
+        viewProfile.setTypeface(typeFace);
+        viewProfile.setVisibility(View.INVISIBLE);
+
+        final EditText connectionUser = (EditText) dialog.findViewById(R.id.text_dialog);
+        connectionUser.setTypeface(typeFace);
+
+        handler = new Handler();
+
+        Runnable r = new Runnable() {
+            public void run() {
+                final String text = connectionUser.getText().toString().trim();
+
+
+                ParseQuery<ParseUser> query = ParseUser.getQuery();
+                query.whereEqualTo("username", text);
+
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> objects, com.parse.ParseException e) {
+                        Log.d("there is: ", "" + objects.size() + " found");
+
+                        compareText = text;
+
+                        if (!objects.isEmpty()) {
+                            Log.d("user name", "found!");
+                            title.setText("USER FOUND");
+                            title.setBackgroundColor(Color.parseColor("#1abc9c"));
+                            title.setTextColor(Color.parseColor("#ffffff"));
+                            viewProfile.setVisibility(View.VISIBLE);
+                            viewProfile.setClickable(true);
+                        } else {
+                            Log.d("user name", "not found...");
+                            title.setText("FIND USER");
+                            title.setBackgroundColor(Color.parseColor("#252339"));
+                            title.setTextColor(Color.parseColor("#f1654c"));
+                            viewProfile.setVisibility(View.INVISIBLE);
+                            viewProfile.setClickable(false);
+                        }
+                    }
+                });
+                handler.postDelayed(this, 300);
+            }
+        };
+
+        handler.postDelayed(r, 300);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialog_view_btn);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                final String username = connectionUser.getText().toString().trim();
+                userProfile(username);
+                dialog.dismiss();
+                // }
+
+            }
+
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacksAndMessages(null);
+                Log.d("handler has stopped", "dialog dismissed");
+            }
+        });
+        dialog.show();
+
+
+    }
+
+    private void userProfile(String user) {
+        Intent i = new Intent(this, Profile.class);
+        i.putExtra("username", user);
+        startActivity(i);
+    }
 
 }
 

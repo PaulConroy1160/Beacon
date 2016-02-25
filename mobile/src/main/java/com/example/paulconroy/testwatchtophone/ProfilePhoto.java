@@ -79,7 +79,7 @@ public class ProfilePhoto extends Activity {
 
 
     public void submit(View v) {
-        submit.setText("....");
+        submit.setText("CREATING PROFILE...");
         submit.setClickable(false);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

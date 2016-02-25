@@ -30,7 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends FragmentActivity
         implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mLocationClient;
     GoogleMap mMap;
@@ -65,7 +65,7 @@ public class MainActivity extends FragmentActivity
 
         status.setText("Calibrating...");
 
-        if(serviceIsOK()){
+        if (serviceIsOK()) {
             initMap();
 
             mLocationClient = new GoogleApiClient.Builder(this)
@@ -87,28 +87,27 @@ public class MainActivity extends FragmentActivity
                 getCurrentLocation();
 
             }
-        },1000);
+        }, 1000);
 
     }
 
-    public boolean serviceIsOK(){
+    public boolean serviceIsOK() {
         int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 
-        if(isAvailable == ConnectionResult.SUCCESS){
+        if (isAvailable == ConnectionResult.SUCCESS) {
             return true;
-        }
-        else if(GooglePlayServicesUtil.isUserRecoverableError(isAvailable)) {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable,this,ERROR_DIALOG_REQUEST);
+        } else if (GooglePlayServicesUtil.isUserRecoverableError(isAvailable)) {
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable, this, ERROR_DIALOG_REQUEST);
             dialog.show();
         } else {
-            Toast.makeText(this,"Can't connect",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Can't connect", Toast.LENGTH_LONG).show();
         }
 
         return false;
     }
 
-    private void initMap(){
-        if(mMap == null){
+    private void initMap() {
+        if (mMap == null) {
             SupportMapFragment mapFragment =
                     (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             mMap = mapFragment.getMap();
@@ -132,11 +131,11 @@ public class MainActivity extends FragmentActivity
 
     }
 
-    public void getCurrentLocation(){
+    public void getCurrentLocation() {
         Location currentLocation = LocationServices.FusedLocationApi
                 .getLastLocation(mLocationClient);
-        if(currentLocation == null){
-            Toast.makeText(this,"can't connect to find location",Toast.LENGTH_LONG).show();
+        if (currentLocation == null) {
+            Toast.makeText(this, "can't connect to find location", Toast.LENGTH_LONG).show();
         } else {
             //Toast.makeText(this,"Location found",Toast.LENGTH_LONG).show();
             LatLng latLng = new LatLng(
@@ -145,7 +144,7 @@ public class MainActivity extends FragmentActivity
             );
             //15 recommended
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
-                    latLng,15
+                    latLng, 15
             );
 
 
@@ -154,24 +153,24 @@ public class MainActivity extends FragmentActivity
 
             enableScan();
             Log.d("Lat is:", " " + myLocation.getLatitude());
-            Log.d("Long is:"," "+myLocation.getLongitude());
+            Log.d("Long is:", " " + myLocation.getLongitude());
 
         }
     }
 
-    public void addMarker(View v){
+    public void addMarker(View v) {
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
                 .title("Beacon")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.markericon)));
     }
 
-    public void timeLineStart(View v){
+    public void timeLineStart(View v) {
         Intent i = new Intent(this, Login.class);
         startActivity(i);
     }
 
-    public void enableScan(){
+    public void enableScan() {
         scan.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(this,
                 R.anim.slide_in_left);
@@ -180,7 +179,7 @@ public class MainActivity extends FragmentActivity
 
     }
 
-    public void disableScan(){
+    public void disableScan() {
 
         Animation animation = AnimationUtils.loadAnimation(this,
                 R.anim.slide_out_left);
@@ -206,16 +205,16 @@ public class MainActivity extends FragmentActivity
         });
     }
 
-    public void refresh(View v){
+    public void refresh(View v) {
         disableScan();
         Animation animation = AnimationUtils.loadAnimation(this,
                 R.anim.rotate);
-       refresh.startAnimation(animation);
+        refresh.startAnimation(animation);
 
 
     }
 
-    public void statusAnimate(){
+    public void statusAnimate() {
 
         status.setVisibility(View.GONE);
         Animation animation = AnimationUtils.loadAnimation(this,
@@ -239,9 +238,6 @@ public class MainActivity extends FragmentActivity
             }
         });
     }
-
-
-
 
 
 }

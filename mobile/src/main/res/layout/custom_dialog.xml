@@ -1,0 +1,54 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:background="#ffffffff">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="#ffffffff">
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#252339"
+            android:gravity="center"
+            android:scaleType="fitCenter"
+            android:text="FIND USER"
+            android:textColor="#f1654c"
+            android:textSize="40sp" />
+
+
+        <Button
+            android:id="@+id/dialog_view_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:background="#f1654c"
+            android:text="VIEW!"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="#fff"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:id="@+id/text_dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:hint="Enter Username"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:padding="20dp"
+
+            android:textColor="#f1654c"
+            android:textSize="20sp"
+            android:layout_above="@+id/dialog_view_btn"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+</FrameLayout>

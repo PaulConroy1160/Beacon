@@ -7,12 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.paulconroy.testwatchtophone.Model.Connection;
 import com.example.paulconroy.testwatchtophone.Model.Model;
@@ -43,6 +45,8 @@ public class Loading extends Activity {
     private TextView welcomeText;
     private ParseUser user;
     private Typeface typeFace;
+    private Handler handler;
+    private ArrayList<String> connections;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,34 @@ public class Loading extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 //searchNewMessages();
-                setUserInformation();
+
+                //Test Model access
+                //setUserInformation();
+
+                mModel.setUserInformation();
+
+                handler = new Handler();
+
+                Runnable r = new Runnable() {
+                    public void run() {
+
+                        if (mModel.getConnectionProblem() == true) {
+                            makeToast("problem connecting");
+                            mModel.setConnectionProblem(false);
+                        }
+
+                        if (mModel.getLoadOutComplete() == true) {
+                            mModel.setLoadOutComplete(false);
+                            Log.d("complete", "ready to go to connections");
+                            pushToWatch(mModel.getConnectionsStrings());
+                            loadOut();
+
+                        }
+                        handler.postDelayed(this, 300);
+                    }
+                };
+
+                handler.postDelayed(r, 300);
 
             }
 
@@ -172,6 +203,7 @@ public class Loading extends Activity {
 
     public void searchForConnections() {
         Log.d("inside", "searchForConnections");
+        connections = new ArrayList<String>();
         List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
 
         ParseQuery<ParseObject> query1 = ParseQuery.getQuery("Connections");
@@ -204,13 +236,17 @@ public class Loading extends Activity {
                                 Connection conn = new Connection();
                                 conn.setId(-1);
                                 conn.setUserName(object.get("user2").toString());
-                                mModel.addConnection(conn);
+                                connections.add(object.get("user2").toString());
+                                getConnectionPic(conn, object.get("user2").toString());
+
                                 //connectionsList.add(conn);
                             } else {
                                 Connection conn = new Connection();
                                 conn.setId(-1);
                                 conn.setUserName(object.get("user1").toString());
-                                mModel.addConnection(conn);
+                                connections.add(object.get("user1").toString());
+                                getConnectionPic(conn, object.get("user1").toString());
+//                                mModel.addConnection(conn);
                                 //connectionsList.add(conn);
                                 //connections.add(object.get("user1").toString());
                             }
@@ -221,8 +257,10 @@ public class Loading extends Activity {
 
 
                     //changeAdapter(connectionsList);
+
                     loadOut();
-                    pushToWatch();
+                    //updateConnectionsToWatch(connections);
+                    pushToWatch(connections);
 
                 } else {
                     Log.d("alert", "errors...");
@@ -235,6 +273,7 @@ public class Loading extends Activity {
     public void connectionsActivity() {
         Intent i = new Intent(this, ConnectionListActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
 
         this.finish();
 
@@ -279,7 +318,7 @@ public class Loading extends Activity {
         });
     }
 
-    public void pushToWatch() {
+    public void pushToWatch(ArrayList<String> connectionsList) {
         Log.d("watch", "sending to watch");
 
 
@@ -295,12 +334,82 @@ public class Loading extends Activity {
         Intent i = new Intent(this, PushToWearable.class);
 
         i.putExtra("operation", "greeting");
-
+        i.putStringArrayListExtra("connections", connectionsList);
         i.putExtra("content", userNameContent);
         this.startService(i);
 
 
     }
 
+    public void getConnectionPic(final Connection conn, String username) {
+        Log.d("inside", "setUserInformation");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        //need to change to username
+        query.whereEqualTo("userName", username);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    Log.d("inside", "setUserInformation");
+                    if (!objects.isEmpty()) {
+                        ParseFile pFile = (ParseFile) objects.get(0).get("pic");
 
+                        pFile.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] data, ParseException e) {
+                                if (e == null) {
+                                    Log.d("success", "bitmap received and added");
+
+                                    Bitmap picture = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                                    conn.setPic(picture);
+                                    mModel.addConnection(conn);
+
+
+                                    //connectionsActivity();
+                                }
+                            }
+                        });
+                    } else {
+                        Log.d("problemo", "no image retrieved");
+
+                    }
+                } else {
+                    Log.d("problemo", "no data retrieved");
+                }
+            }
+        });
+    }
+
+    private void updateConnectionsToWatch(ArrayList<String> connectionsList) {
+        Log.d("watch", "sending to watch");
+
+
+        String userName = user.getUsername();
+
+        //final String notificationTitle = json.getString("title").toString();
+        final String userNameContent = userName;
+        //final String uri = json.getString("uri");
+
+        //Log.d("data1",notificationTitle);
+        //Log.d("data2", notificationContent);
+
+        Log.d("connection being sent", connectionsList.get(0));
+
+        Intent i = new Intent(this, PushToWearable.class);
+
+        i.putExtra("operation", "update");
+        i.putStringArrayListExtra("connections", connectionsList);
+        this.startService(i);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    public void makeToast(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+    }
 }

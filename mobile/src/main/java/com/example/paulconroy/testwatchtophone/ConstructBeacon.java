@@ -58,13 +58,13 @@ public class ConstructBeacon extends Activity {
         tts = new TextToSpeech(ConstructBeacon.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status != TextToSpeech.ERROR){
+                if (status != TextToSpeech.ERROR) {
                     tts.setLanguage(Locale.ENGLISH);
                 }
 
                 if (status == TextToSpeech.SUCCESS) {
                     //Used to read the mesage aloud - used only for handsfree
-                    //ReadOut(content);
+                    ReadOut(content);
                 }
             }
         });
@@ -76,7 +76,7 @@ public class ConstructBeacon extends Activity {
 
     @Override
     protected void onPause() {
-        if(tts==null){
+        if (tts == null) {
             tts.stop();
             tts.shutdown();
         }
@@ -84,13 +84,15 @@ public class ConstructBeacon extends Activity {
         super.onPause();
     }
 
-    public void ReadOut(String c){
-        String text = c;
+    public void ReadOut(String c) {
+        String text = " Your message is:  " + c + ". Would you like to send this message?";
         Log.i("text", "inside ReadOut method");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ttsGreater21(text);
+            getResponse();
         } else {
             ttsUnder20(text);
+            getResponse();
         }
 
     }
@@ -104,7 +106,7 @@ public class ConstructBeacon extends Activity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void ttsGreater21(String text) {
-        String utteranceId=this.hashCode() + "";
+        String utteranceId = this.hashCode() + "";
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
@@ -170,6 +172,28 @@ public class ConstructBeacon extends Activity {
 
         storeMessage(messageText);
         //chatList.setSelection(adapter.getCount() - 1);
+
+    }
+
+    public void getResponse() {
+
+        Log.d("watch", "sending to watch");
+
+
+        String userName = user.getUsername();
+
+        //final String notificationTitle = json.getString("title").toString();
+        final String userNameContent = userName;
+        //final String uri = json.getString("uri");
+
+        //Log.d("data1",notificationTitle);
+        //Log.d("data2", notificationContent);
+
+        Intent i = new Intent(this, PushToWearable.class);
+
+        i.putExtra("operation", "response");
+        i.putExtra("content", userNameContent);
+        this.startService(i);
 
     }
 
