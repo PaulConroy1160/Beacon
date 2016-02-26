@@ -63,5 +63,10 @@ public class DashBoard extends Activity {
         overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.finish();
+    }
 }
 

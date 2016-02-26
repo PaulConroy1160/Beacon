@@ -12,7 +12,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Content"
         android:gravity="center"
-        android:maxLines="4"
+        android:maxLines="3"
         android:scrollbars="vertical"
         android:textColor="#fff"
         android:id="@+id/content"

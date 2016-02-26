@@ -479,7 +479,9 @@ public class ChatActivity extends AppCompatActivity {
 
     public void checkText() {
 
-        if (messageField.getText().length() != 0) {
+        String text = messageField.getText().toString().trim();
+
+        if (text.length() != 0) {
             sendBTN.setText("SEND");
             sendBTN.setBackgroundColor(Color.parseColor("#f1654c"));
             sendBTN.setClickable(true);

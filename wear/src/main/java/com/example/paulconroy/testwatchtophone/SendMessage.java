@@ -73,15 +73,15 @@ public class SendMessage extends Activity implements
 
     public void commitFunction(int position) throws IOException {
         if (position == 0) {
-            Toast.makeText(this, "Reply Function", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Reply Function", Toast.LENGTH_LONG).show();
             sendMessage(mModel.getReplyString());
             //passMessage();
             mViewPager.setCurrentItem(1);
 
 
         } else if (position == 2) {
-            Toast.makeText(this, "Decline Function", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, this.getClass());
+            //Toast.makeText(this, "Decline Function", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, Messages.class);
             startActivity(i);
             this.finish();
         }

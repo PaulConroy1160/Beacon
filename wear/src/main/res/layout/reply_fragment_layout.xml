@@ -13,7 +13,7 @@
         android:text="Content"
         android:textColor="#fff"
         android:gravity="center"
-        android:maxLines="4"
+        android:maxLines="3"
         android:scrollbars="vertical"
         android:id="@+id/reply"
         android:layout_gravity="center" />
@@ -30,9 +30,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Confirm?"
             android:textColor="#b9b9b9"
-        android:layout_marginTop="10dp"
-        android:id="@+id/confirmation"
-        android:layout_gravity="center_horizontal|top" />
+            android:id="@+id/confirmation" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -60,6 +58,6 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Swipe Right To Send"
         android:textColor="#b9b9b9"
-        android:id="@+id/textView2"
+        android:id="@+id/instructionId"
         android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>

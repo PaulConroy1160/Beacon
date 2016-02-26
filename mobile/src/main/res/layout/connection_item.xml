@@ -64,6 +64,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#b9b9b9"
                         android:textSize="15sp"
+                        android:paddingRight="10dp"
                         android:layout_gravity="center_horizontal|left"
                         android:gravity="center_vertical" />
 
