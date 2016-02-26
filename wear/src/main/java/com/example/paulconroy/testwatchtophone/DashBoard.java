@@ -29,14 +29,14 @@ public class DashBoard extends Activity {
         adapter = new FragmentAdapter(
                 getFragmentManager());
         adapter.addFragment(new MessageFragment());
-        adapter.addFragment(new SettingsFragment());
+        //adapter.addFragment(new SettingsFragment());
 
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
-                commitFunction(position);
+
             }
 
             @Override
@@ -55,27 +55,13 @@ public class DashBoard extends Activity {
 
     }
 
-    public void commitFunction(int position) {
-        if (position == 0) {
-//            Toast.makeText(this, "Reply Function", Toast.LENGTH_LONG).show();
-
-        } else if (position == 1) {
-//            Toast.makeText(this, "Decline Function", Toast.LENGTH_LONG).show();
-
-        }
-    }
 
     public void messageBTNHandler(View v) {
-        Toast.makeText(this, "Message btn clicked", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Message btn clicked", Toast.LENGTH_LONG).show();
         Intent i = new Intent(this, Messages.class);
         startActivity(i);
         overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.finish();
-    }
 }
 

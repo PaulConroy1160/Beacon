@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestWatchToPhone</string>
+    <string name="app_name">Beacon Wear</string>
     <string name="hello_world">Hello World!</string>
     <string name="confirm">Confirm Message</string>
 </resources>

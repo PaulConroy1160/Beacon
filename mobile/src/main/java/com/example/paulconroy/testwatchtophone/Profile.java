@@ -38,6 +38,7 @@ import com.example.paulconroy.testwatchtophone.Model.Model;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -360,9 +361,14 @@ public class Profile extends AppCompatActivity {
 
     public void setConnection() {
         connectBTN.setClickable(false);
+        ParseACL acl = new ParseACL();
+        acl.setPublicWriteAccess(true);
+        acl.setPublicReadAccess(true);
+
         final ParseObject connection = new ParseObject("Connections");
         connection.put("user1", user.getUsername());
         connection.put("user2", userNameText);
+        connection.setACL(acl);
         connection.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

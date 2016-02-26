@@ -48,7 +48,7 @@ public class Greeting extends Activity {
         welcomeText.setTypeface(typeFace);
 
         if (userName == null) {
-            welcomeText.setText("Welcome, " + "Paul" + "!");
+            welcomeText.setText("Welcome, " + "ERROR" + "!");
         } else {
             welcomeText.setText("Welcome, " + userName + "!");
         }

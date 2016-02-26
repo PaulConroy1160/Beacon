@@ -75,9 +75,4 @@ public class Messages extends Activity {
         startActivity(i);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.finish();
-    }
 }

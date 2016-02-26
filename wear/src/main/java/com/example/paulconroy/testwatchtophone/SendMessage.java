@@ -76,13 +76,14 @@ public class SendMessage extends Activity implements
             Toast.makeText(this, "Reply Function", Toast.LENGTH_LONG).show();
             sendMessage(mModel.getReplyString());
             //passMessage();
-            this.finish();
+            mViewPager.setCurrentItem(1);
 
 
         } else if (position == 2) {
             Toast.makeText(this, "Decline Function", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, this.getClass());
+            startActivity(i);
             this.finish();
-            mViewPager.setCurrentItem(1);
         }
     }
 
@@ -92,6 +93,7 @@ public class SendMessage extends Activity implements
         if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String message = results.get(0);
+            Log.d("message is", message);
 
             mModel.setReplyString(message);
 
@@ -191,6 +193,8 @@ public class SendMessage extends Activity implements
         reply.setReceiver(mModel.getSender());
         reply.setMessage(message);
 
+        Log.d("messages being sent now are:", message);
+
         byte[] data = SerializationUtils.serialize(reply);
 
 
@@ -220,7 +224,9 @@ public class SendMessage extends Activity implements
     }
 
     private void endActivity() {
+        Intent i = new Intent(this, DashBoard.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
         this.finish();
-        System.exit(0);
     }
 }

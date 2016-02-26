@@ -96,8 +96,10 @@ public class MainActivity extends Activity {
     }
 
     public void dismissMessage() {
+        Intent i = new Intent(this, DashBoard.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.open_trans, R.anim.close_trans);
         this.finish();
-        System.exit(0);
     }
 }
 

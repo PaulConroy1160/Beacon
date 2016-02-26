@@ -39,7 +39,7 @@
                 android:id="@+id/signup"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp"
-                android:textColor="#252339"
+                android:textColor="#fff"
                 android:layout_gravity="center_horizontal"
                 android:background="#f1654c"
                 android:layout_weight=".5"
