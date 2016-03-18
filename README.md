@@ -1,4 +1,4 @@
 # Beacon
 
 
-![alt tag](http://i.imgur.com/cksieCB.png?1)
+![alt tag](http://i.imgur.com/vml3Vkv.jpg)
